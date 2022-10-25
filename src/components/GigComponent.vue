@@ -1,8 +1,13 @@
 <template>
   <div>
-        <div :for="gig in gigs" :key="gig._id">
-            <h1>gig.gigName</h1>
-            <h3>By: gig.organizationName</h3>
+        <div v-if="gigs">
+            <div :for="gig in gigs" :key="gig._id">
+                <h1>gig.gigName</h1>
+                <h3>By: gig.organizationName</h3>
+            </div>
+        </div>
+        <div v-else>
+            <h1>There are no upcoming gigs currently scheduled.</h1>
         </div>
   </div>
 </template>
