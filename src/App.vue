@@ -1,15 +1,15 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <GigComponent />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import GigComponent from "./components/GigComponent.vue"
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    GigComponent
   }
 }
 </script>
