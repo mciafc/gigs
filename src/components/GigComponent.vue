@@ -6,10 +6,19 @@
             <div class="gig" v-for="gig in this.gigs" :key="gig._id">
                 <h1>{{ gig.gigName }}</h1>
                 <h3>By: {{ gig.organizationName }}</h3>
+                <h4>{{ dateRange(gig.gigStartDate, gig.gigEndDate) }}</h4>
+                <p>Location: {{ gig.gigLocation }}</p>
                 <p v-html="trueOrFalse(gig.paidJob)"></p>
                 <p>Employees Needed: {{ employeesNeeded(gig.employeesNeeded) }}</p>
                 <p>Additional Info:</p>
                 <p>{{ gig.additionalInformation }}</p>
+                <p v-if="gig.registeredByOrganizer == false">Registered by AFC Exec.</p>
+                <button>AVAILABLE? CLICK HERE</button>
+                <p>Amount of available employees goes here (not implemented yet)</p>
+                <div>
+                    <h3>Exec Tools</h3>
+                    <button @click="getOrganizerContactInfo(gig)">VIEW ORGANIZER CONTACT INFO</button>
+                </div>
             </div>
         </div>
         <div v-else>
@@ -49,6 +58,14 @@ export default {
             this.pastgigs = data
         })
     },
+    methods: {
+        getOrganizerContactInfo(gig) {
+            if (gig.registeredByOrganizer == true) {
+                return alert(`Organizer Name: ${gig.organizerName}\nOrganizer Email: ${gig.organizerContactEmail}\nOrganizer Phone Number: ${gig.organizerContactNumber}`)
+            }
+            alert(`WARNING: THIS INFORMATION MAY NOT BE ACCURATE AS THIS EVENT WAS REGISTERED BY AN AFC EXEC AND NOT THE ORGANIZER\nOrganizer Name: ${gig.organizerName}\nOrganizer Email: ${gig.organizerContactEmail}\nOrganizer Phone Number: ${gig.organizerContactNumber}`)
+        }
+    },
     computed: {
         employeesNeeded() {
             return function(amountSpecified) {
@@ -64,6 +81,23 @@ export default {
                     return `Paid Job?: <span class="yes">Yes</span>`
                 }
                 return `Paid Job?: <span class="no">No</span>`
+            }
+        },
+        dateRange() {
+            return function(start, end) {
+                let startString = new Date(start).toDateString()
+                // let endString = new Date(end).toDateString()
+                let startMinutes = new Date(start).getMinutes()
+                let startHours = new Date(start).getHours()
+                let endMinutes = new Date(end).getMinutes()
+                let endHours = new Date(end).getHours()
+                if (startMinutes < 10) {
+                    startMinutes = `0${startMinutes}`
+                }
+                if (endMinutes < 10) {
+                    endMinutes = `0${endMinutes}`
+                }
+                return `${startString} @ ${startHours}:${startMinutes} - ${endHours}:${endMinutes}`
             }
         }
     }
