@@ -1,5 +1,4 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
   <GigComponent />
 </template>
 
@@ -20,7 +19,19 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #FFF;
   margin-top: 60px;
+}
+
+body {
+  background-color: #1a1a1a;
+}
+
+.footer {
+  position: absolute;
+  bottom: 5px;
+  margin: auto;
+  left: 0;
+  right: 0;
 }
 </style>
