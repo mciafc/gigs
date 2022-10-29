@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="userAuthenticated">
     <h1>Upcoming Gigs:</h1>
     <p>Sorted in order of soonest to latest</p>
         <div v-if="this.gigs.length > 0">
@@ -40,6 +40,9 @@
 import io from "socket.io-client";
 export default {
     name: 'GigComponent',
+    props: {
+        userAuthenticated: Boolean
+    },
     data() {
         return {
             socket: {},
