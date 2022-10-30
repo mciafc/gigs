@@ -1,5 +1,6 @@
 <template>
   <div v-if="userAuthenticated">
+    <p>Welcome back, <span style="color: yellow" v-if="user.isExec"><b>[EXEC] </b></span> <span v-if="user.FirstName == `Ethan`">"Senior Executive Member" </span>{{ user.FirstName }}</p>
     <h1>Upcoming Gigs:</h1>
     <p>Sorted in order of soonest to latest</p>
         <div v-if="this.gigs.length > 0">
@@ -41,7 +42,8 @@ import io from "socket.io-client";
 export default {
     name: 'GigComponent',
     props: {
-        userAuthenticated: Boolean
+        userAuthenticated: Boolean,
+        user: Object
     },
     data() {
         return {

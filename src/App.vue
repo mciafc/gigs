@@ -2,12 +2,14 @@
   <div class="authentication-modal" v-if="!authenticated" ref="authentication-modal">
     <h1>This site requires authentication.</h1>
     <h2>Please enter your AFC PIN Below.</h2>
+    <input type="text" class="pininput" placeholder="1234" ref="pinInput" @keydown.enter="sendAuthenticationAttempt(this.$refs.pinInput.value)">
   </div>
-  <GigComponent :userAuthenticated="authenticated"></GigComponent>
+  <GigComponent :userAuthenticated="authenticated" :user="user"></GigComponent>
 </template>
 
 <script>
 import GigComponent from "./components/GigComponent.vue"
+import io from "socket.io-client";
 
 export default {
   name: 'App',
@@ -16,8 +18,28 @@ export default {
   },
   data() {
     return {
-      authenticated: false
+      authenticated: false,
+      user: {},
+      socket: {}
     }
+  },
+  methods: {
+    sendAuthenticationAttempt(pin) {
+      this.socket.emit("authenticationAttempt", pin)
+    }
+  },
+  created() {
+    this.socket = io('http://localhost:7694/authentication')
+  },
+  mounted() {
+    this.socket.on("successfulAuthentication", data => {
+      this.user = data
+      this.authenticated = true
+      console.log("Successfully authenticated")
+    })
+    this.socket.on("failedAuthentication", () => {
+      window.location.href = `https://mciafc.com`
+    })
   }
 }
 </script>
@@ -53,5 +75,37 @@ body {
   overflow: hidden;
   margin: 0;
   padding: 0;
+  top: 0;
+  left: 0;
+}
+
+.pininput {
+  background-color: white;
+  outline: none;
+  border: none;
+  width: 10%;
+  resize: none;
+  margin: auto;
+  padding: .5rem 1rem;
+  font-size: 1rem;
+  border-radius: .5rem;
+  margin-bottom: 1rem;
+  transition: 200ms;
+  text-align: center;
+}
+
+.pininput:focus {
+  background-color: white;
+  outline: none;
+  border: none;
+  width: 10%;
+  transform: scale(1.1);
+  transition: 200ms;
+  margin: auto;
+  padding: .5rem 1rem;
+  font-size: 1rem;
+  border-radius: .5rem;
+  margin-bottom: 1rem;
+  text-align: center;
 }
 </style>
