@@ -2,7 +2,7 @@
   <div class="authentication-modal" v-if="!authenticated" ref="authentication-modal">
     <h1>This site requires authentication.</h1>
     <h2>Please enter your AFC PIN Below.</h2>
-    <input type="text" class="pininput" placeholder="1234" ref="pinInput" @keydown.enter="sendAuthenticationAttempt(this.$refs.pinInput.value)">
+    <input type="text" maxlength="4" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="pininput" placeholder="1234" ref="pinInput" @keydown.enter="sendAuthenticationAttempt(this.$refs.pinInput.value)">
   </div>
   <GigComponent :userAuthenticated="authenticated" :user="user"></GigComponent>
 </template>
@@ -29,7 +29,7 @@ export default {
     }
   },
   created() {
-    this.socket = io('http://localhost:7694/authentication')
+    this.socket = io('https://io.mciafc.com/authentication')
   },
   mounted() {
     this.socket.on("successfulAuthentication", data => {
