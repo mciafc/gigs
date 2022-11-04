@@ -11,12 +11,12 @@
                 <p>Location: {{ gig.gigLocation }}</p>
                 <p v-html="trueOrFalse(gig.paidJob)"></p>
                 <p>Employees Needed: {{ employeesNeeded(gig.employeesNeeded) }}</p>
-                <p>Additional Info:</p>
+                <h3>Additional Info:</h3>
                 <p>{{ gig.additionalInformation }}</p>
                 <p v-if="gig.registeredByOrganizer == false">Registered by AFC Exec.</p>
-                <button>AVAILABLE? CLICK HERE</button>
-                <p>Amount of available employees goes here (not implemented yet)</p>
-                <div>
+                <!-- <button>AVAILABLE? CLICK HERE</button>
+                <p>Amount of available employees goes here (not implemented yet)</p> -->
+                <div v-if="user.isExec">
                     <h3>Exec Tools</h3>
                     <button @click="getOrganizerContactInfo(gig)">VIEW ORGANIZER CONTACT INFO</button>
                 </div>
