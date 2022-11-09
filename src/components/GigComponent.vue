@@ -3,20 +3,19 @@
     <p>Welcome back, <span style="color: yellow" v-if="user.isExec"><b>[EXEC] </b></span> <span v-if="user.FirstName == `Ethan`">"Senior Executive Member" </span>{{ user.FirstName }}</p>
     <button v-if="user.isExec" @click="this.execToolsEnabled = !this.execToolsEnabled">TOGGLE EXEC TOOLS</button>
     <h1>Upcoming Events:</h1>
-    <p>Sorted in order of soonest to latest</p>
-        <div v-if="this.gigs.length > 0">
+        <div v-if="this.gigs.length > 0" class="container">
             <div class="gig" v-for="gig in this.gigs" :key="gig._id">
                 <h1>{{ gig.gigName }}</h1>
                 <h3>By: {{ gig.organizationName }}</h3>
                 <h4>📅{{ dateRange(gig.gigStartDate, gig.gigEndDate) }}</h4>
-                <p>📍Location: {{ gig.gigLocation }}</p>
+                <p>📍<b>Location:</b> {{ gig.gigLocation }}</p>
                 <p v-html="trueOrFalse(gig.paidJob)" v-if="user.isExec && gig.paidJob"></p>
-                <p>👥Employees Needed: {{ employeesNeeded(gig.employeesNeeded) }}</p>
+                <p>👥<b>Members Needed:</b> {{ employeesNeeded(gig.employeesNeeded) }}</p>
                 <h3>Additional Info:</h3>
                 <p>{{ gig.additionalInformation }}</p>
-                <p v-if="gig.registeredByOrganizer == false">Registered by AFC Exec.</p>
-                <button @click="this.socket.emit('available', user, gig._id)">AVAILABLE? CLICK HERE</button>
-                <p>{amount} marked available. (incl. {execs} execs)</p>
+                <p v-if="gig.registeredByOrganizer == false">Registered by AFC Exec. (Information may be inaccurate)</p>
+                <!-- <button @click="this.socket.emit('available', user, gig._id)">AVAILABLE? CLICK HERE</button>
+                <p>{amount} marked available. (incl. {execs} exec<span>s</span>)</p> -->
                 <div v-if="user.isExec && execToolsEnabled">
                     <h3>Exec Tools</h3>
                     <p><button @click="getOrganizerContactInfo(gig)">VIEW ORGANIZER CONTACT INFO</button></p>
@@ -125,6 +124,7 @@ export default {
     padding-bottom: 50px;
     padding-left: 20px;
     padding-right: 20px;
+    flex: 0 0 auto;
     height: fit-content;
     width: 500px;
     margin: 20px;
@@ -134,5 +134,11 @@ export default {
 }
 .no {
     color: red;
+}
+
+.container {
+    display: flex;
+    overflow-x: auto;
+    flex-wrap: nowrap;
 }
 </style>

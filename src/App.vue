@@ -2,7 +2,7 @@
   <div class="authentication-modal" v-if="!authenticated" ref="authentication-modal">
     <h1>This site requires authentication.</h1>
     <h2>Please enter your AFC PIN Below.</h2>
-    <input type="text" maxlength="4" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="pininput" placeholder="1234" ref="pinInput" @keydown.enter="sendAuthenticationAttempt(this.$refs.pinInput.value)">
+    <input type="password" maxlength="4" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="pininput" placeholder="1234" ref="pinInput" @keydown.enter="sendAuthenticationAttempt(this.$refs.pinInput.value)">
   </div>
   <GigComponent :userAuthenticated="authenticated" :user="user"></GigComponent>
 </template>
