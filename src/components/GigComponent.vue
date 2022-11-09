@@ -1,8 +1,8 @@
 <template>
   <div v-if="userAuthenticated">
-    <p>Welcome back, <span style="color: yellow" v-if="user.isExec"><b>[EXEC] </b></span> <span v-if="user.FirstName == `Ethan`">"Senior Executive Member" </span>{{ user.FirstName }}</p>
-    <button v-if="user.isExec" @click="this.execToolsEnabled = !this.execToolsEnabled">TOGGLE EXEC TOOLS</button>
+    <p class="bindToTop">Welcome back, <span style="color: yellow" v-if="user.isExec"><b>[EXEC] </b></span> <span v-if="user.FirstName == `Ethan`">"Senior Executive Member" </span>{{ user.FirstName }}</p>
     <h1>Upcoming Events:</h1>
+        <button v-if="user.isExec" @click="this.execToolsEnabled = !this.execToolsEnabled">TOGGLE EXEC TOOLS</button>
         <div v-if="this.gigs.length > 0" class="container">
             <div class="gig" v-for="gig in this.gigs" :key="gig._id">
                 <h1>{{ gig.gigName }}</h1>
@@ -113,7 +113,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .gig {
     background-color: #313030;
     color: #fff;
@@ -140,5 +140,29 @@ export default {
     display: flex;
     overflow-x: auto;
     flex-wrap: nowrap;
+}
+
+.bindToTop {
+    position: absolute;
+    top: 0;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
+button {
+    background-color: rgb(229, 157, 22);
+    padding: 7px;
+    border: 5px 5px;
+    border-color: rgb(229, 157, 22);
+    border-radius: 5px;
+    color: white;
+}
+
+button:hover {
+    background-color: rgb(229, 157, 22, 0.9);
+    transition: all 200ms;
 }
 </style>
