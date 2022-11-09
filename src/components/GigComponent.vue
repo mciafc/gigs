@@ -2,25 +2,24 @@
   <div v-if="userAuthenticated">
     <p>Welcome back, <span style="color: yellow" v-if="user.isExec"><b>[EXEC] </b></span> <span v-if="user.FirstName == `Ethan`">"Senior Executive Member" </span>{{ user.FirstName }}</p>
     <button v-if="user.isExec" @click="this.execToolsEnabled = !this.execToolsEnabled">TOGGLE EXEC TOOLS</button>
-    <h1>Upcoming Gigs:</h1>
+    <h1>Upcoming Events:</h1>
     <p>Sorted in order of soonest to latest</p>
         <div v-if="this.gigs.length > 0">
             <div class="gig" v-for="gig in this.gigs" :key="gig._id">
                 <h1>{{ gig.gigName }}</h1>
                 <h3>By: {{ gig.organizationName }}</h3>
-                <h4>{{ dateRange(gig.gigStartDate, gig.gigEndDate) }}</h4>
-                <p>Location: {{ gig.gigLocation }}</p>
-                <p v-html="trueOrFalse(gig.paidJob)"></p>
-                <p>Employees Needed: {{ employeesNeeded(gig.employeesNeeded) }}</p>
+                <h4>📅{{ dateRange(gig.gigStartDate, gig.gigEndDate) }}</h4>
+                <p>📍Location: {{ gig.gigLocation }}</p>
+                <p v-html="trueOrFalse(gig.paidJob)" v-if="user.isExec && gig.paidJob"></p>
+                <p>👥Employees Needed: {{ employeesNeeded(gig.employeesNeeded) }}</p>
                 <h3>Additional Info:</h3>
                 <p>{{ gig.additionalInformation }}</p>
                 <p v-if="gig.registeredByOrganizer == false">Registered by AFC Exec.</p>
-                <button>AVAILABLE? CLICK HERE</button>
+                <button @click="this.socket.emit('available', user, gig._id)">AVAILABLE? CLICK HERE</button>
                 <p>{amount} marked available. (incl. {execs} execs)</p>
                 <div v-if="user.isExec && execToolsEnabled">
                     <h3>Exec Tools</h3>
                     <p><button @click="getOrganizerContactInfo(gig)">VIEW ORGANIZER CONTACT INFO</button></p>
-                    <p><button>VIEW MEMBERS MARKED AS AVAILABLE</button></p>
                     <p><button>COPY EMAIL LIST OF MEMBERS MARKED AS AVAILABLE</button></p>
                 </div>
             </div>
