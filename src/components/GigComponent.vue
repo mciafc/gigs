@@ -1,6 +1,6 @@
 <template>
   <div v-if="userAuthenticated">
-    <p class="bindToTop">Welcome back, <span style="color: yellow" v-if="user.isExec"><b>[EXEC] </b></span> <span v-if="user.FirstName == `Ethan`">"Senior Executive Member" </span>{{ user.FirstName }}</p>
+    <p class="bindToTop">Welcome back, <span style="color: rgb(229, 157, 22)" v-if="user.isExec"><b>[EXEC] </b></span> <span v-if="user.FirstName == `Ethan`">"Senior Executive Member" </span>{{ user.FirstName }}</p>
     <h1>Upcoming Events:</h1>
         <button v-if="user.isExec" @click="this.execToolsEnabled = !this.execToolsEnabled">TOGGLE EXEC TOOLS</button>
         <div v-if="this.gigs.length > 0" class="container">
@@ -24,7 +24,7 @@
             </div>
         </div>
         <div v-else>
-            <h1>There are no upcoming gigs currently scheduled.</h1>
+            <h1>There are no upcoming events currently scheduled.</h1>
         </div>
     <!-- <h1>Previous Gigs:</h1>
         <div ref="pastGigsDiv">
@@ -114,6 +114,7 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
 .gig {
     background-color: #313030;
     color: #fff;
@@ -155,10 +156,15 @@ export default {
 button {
     background-color: rgb(229, 157, 22);
     padding: 7px;
+    font-size: 20px;
+    max-width: 80%;
     border: 5px 5px;
     border-color: rgb(229, 157, 22);
     border-radius: 5px;
     color: white;
+    transition: all 200ms;
+    font-weight: bold;
+    font-family: 'Roboto Condensed', sans-serif;
 }
 
 button:hover {
