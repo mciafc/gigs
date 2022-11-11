@@ -77,7 +77,7 @@ export default {
     computed: {
         employeesNeeded() {
             return function(amountSpecified) {
-                if (amountSpecified > -1) {
+                if (amountSpecified > 0) {
                     return amountSpecified
                 }
                 return "As many as possible."
