@@ -11,7 +11,7 @@
                 <p>📍<b>Location:</b> {{ gig.gigLocation }}</p>
                 <p v-html="trueOrFalse(gig.paidJob)" v-if="user.isExec && gig.paidJob"></p>
                 <p>👥<b>Members Needed:</b> {{ employeesNeeded(gig.employeesNeeded) }}</p>
-                <h3>Additional Info:</h3>
+                <h3 v-if="gig.additionalInformation != 'No additional details specified.'">Additional Info:</h3>
                 <p>{{ gig.additionalInformation }}</p>
                 <p v-if="gig.registeredByOrganizer == false">Registered by AFC Exec. (Information may be inaccurate)</p>
                 <!-- <button @click="this.socket.emit('available', user, gig._id)">AVAILABLE? CLICK HERE</button>
