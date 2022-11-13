@@ -22,6 +22,7 @@
                     <p><button>COPY EMAIL LIST OF MEMBERS MARKED AS AVAILABLE</button></p>
                     <p><button class="deletebutton" @click="areYouSureYouWantToDelete()" v-if="!deleteConfirmation">DELETE EVENT</button></p>
                     <p><button v-if="deleteConfirmation" class="deletebutton" @click="requestEventDeletion(gig._id)">ARE YOU REALLY SURE YOU WANT TO DO THIS? YOU CANT GO BACK!!!!</button></p>
+                    <p><button v-if="deleteConfirmation" class="canceldeletebutton" @click="deleteConfirmation = false">CANCEL DELETION</button></p>
                 </div>
             </div>
         </div>
@@ -185,6 +186,11 @@ button {
 .deletebutton {
     background-color: rgb(255, 0, 0) !important;
     border-color: rgb(255, 0, 0) !important
+}
+
+.canceldeletebutton {
+    background-color: green !important;
+    border-color: green !important;
 }
 
 button:hover {
