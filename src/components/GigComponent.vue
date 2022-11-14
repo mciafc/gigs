@@ -11,8 +11,8 @@
                 <p>📍<b>Location:</b> {{ gig.gigLocation }}</p>
                 <p v-html="trueOrFalse(gig.paidJob)" v-if="user.isExec && gig.paidJob"></p>
                 <p>👥<b>Members Needed:</b> {{ employeesNeeded(gig.employeesNeeded) }}</p>
-                <h3>Additional Info:</h3>
-                <p>{{ gig.additionalInformation }}</p>
+                <h3 v-if="gig.additionalInformation != 'No additional details specified.'">Additional Info:</h3>
+                <p v-if="gig.additionalInformation != 'No additional details specified.'">{{ gig.additionalInformation }}</p>
                 <p v-if="gig.registeredByOrganizer == false">Registered by AFC Exec. (Information may be inaccurate)</p>
                 <!-- <button @click="this.socket.emit('available', user, gig._id)">AVAILABLE? CLICK HERE</button>
                 <p>{amount} marked available. (incl. {execs} exec<span>s</span>)</p> -->
@@ -20,6 +20,9 @@
                     <h3>Exec Tools</h3>
                     <p><button @click="getOrganizerContactInfo(gig)">VIEW ORGANIZER CONTACT INFO</button></p>
                     <p><button>COPY EMAIL LIST OF MEMBERS MARKED AS AVAILABLE</button></p>
+                    <p><button class="deletebutton" @click="areYouSureYouWantToDelete()" v-if="!deleteConfirmation">DELETE EVENT</button></p>
+                    <p><button v-if="deleteConfirmation" class="deletebutton" @click="requestEventDeletion(gig._id)">ARE YOU REALLY SURE YOU WANT TO DO THIS? YOU CANT GO BACK!!!!</button></p>
+                    <p><button v-if="deleteConfirmation" class="canceldeletebutton" @click="deleteConfirmation = false">CANCEL DELETION</button></p>
                 </div>
             </div>
         </div>
@@ -52,7 +55,8 @@ export default {
             gigs: {},
             availableEmployees: {},
             pastgigs: {},
-            execToolsEnabled: false
+            execToolsEnabled: false,
+            deleteConfirmation: false,
         }
     },
     created() {
@@ -65,6 +69,10 @@ export default {
         this.socket.on("pastgigs", data => {
             this.pastgigs = data
         })
+        this.socket.on("deleteResponse", () => {
+            this.deleteConfirmation = false
+            this.execToolsEnabled = false
+        })
     },
     methods: {
         getOrganizerContactInfo(gig) {
@@ -72,12 +80,20 @@ export default {
                 return alert(`Organizer Name: ${gig.organizerName}\nOrganizer Email: ${gig.organizerContactEmail}\nOrganizer Phone Number: ${gig.organizerContactNumber}`)
             }
             alert(`WARNING: THIS INFORMATION MAY NOT BE ACCURATE AS THIS EVENT WAS REGISTERED BY AN AFC EXEC AND NOT THE ORGANIZER\nOrganizer Name: ${gig.organizerName}\nOrganizer Email: ${gig.organizerContactEmail}\nOrganizer Phone Number: ${gig.organizerContactNumber}`)
+        },
+        areYouSureYouWantToDelete() {
+            this.deleteConfirmation = true
+            alert("PLEASE MAKE SURE THIS IS ACTUALLY WHAT YOU ARE MEANING TO DO, IF YOU DELETE THE EVENT IT IS PERMANENTLY DELETED AND NOT RECOVERABLE. BE CAREFUL PLEASE")
+        },
+        requestEventDeletion(gigId) {
+            console.log(gigId)
+            this.socket.emit("deleteRequest", gigId)
         }
     },
     computed: {
         employeesNeeded() {
             return function(amountSpecified) {
-                if (amountSpecified > -1) {
+                if (amountSpecified > 0) {
                     return amountSpecified
                 }
                 return "As many as possible."
@@ -165,6 +181,16 @@ button {
     transition: all 200ms;
     font-weight: bold;
     font-family: 'Roboto Condensed', sans-serif;
+}
+
+.deletebutton {
+    background-color: rgb(255, 0, 0) !important;
+    border-color: rgb(255, 0, 0) !important
+}
+
+.canceldeletebutton {
+    background-color: green !important;
+    border-color: green !important;
 }
 
 button:hover {
