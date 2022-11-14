@@ -14,12 +14,14 @@
                 <h3 v-if="gig.additionalInformation != 'No additional details specified.'">Additional Info:</h3>
                 <p v-if="gig.additionalInformation != 'No additional details specified.'">{{ gig.additionalInformation }}</p>
                 <p v-if="gig.registeredByOrganizer == false">Registered by AFC Exec. (Information may be inaccurate)</p>
-                <!-- <button @click="this.socket.emit('available', user, gig._id)">AVAILABLE? CLICK HERE</button>
-                <p>{amount} marked available. (incl. {execs} exec<span>s</span>)</p> -->
+                <div v-if="employeesAvailable(gig._id)">
+                    <button @click="this.socket.emit('available', user, gig._id)">AVAILABLE? CLICK HERE</button>
+                    <p>{{ employeesAvailable(gig._id).length }} member<span v-if="employeesAvailable(gig._id).length > 1 || employeesAvailable(gig._id).length == 0">s are</span><span v-else> is</span> marked as available.</p>
+                </div>
                 <div v-if="user.isExec && execToolsEnabled">
                     <h3>Exec Tools</h3>
                     <p><button @click="getOrganizerContactInfo(gig)">VIEW ORGANIZER CONTACT INFO</button></p>
-                    <p><button>COPY EMAIL LIST OF MEMBERS MARKED AS AVAILABLE</button></p>
+                    <p><button>MANAGE AVAILABLE MEMBERS</button></p>
                     <p><button class="deletebutton" @click="areYouSureYouWantToDelete()" v-if="!deleteConfirmation">DELETE EVENT</button></p>
                     <p><button v-if="deleteConfirmation" class="deletebutton" @click="requestEventDeletion(gig._id)">ARE YOU REALLY SURE YOU WANT TO DO THIS? YOU CANT GO BACK!!!!</button></p>
                     <p><button v-if="deleteConfirmation" class="canceldeletebutton" @click="deleteConfirmation = false">CANCEL DELETION</button></p>
@@ -73,6 +75,9 @@ export default {
             this.deleteConfirmation = false
             this.execToolsEnabled = false
         })
+        this.socket.on("availability", data => {
+            this.availableEmployees = data
+        })
     },
     methods: {
         getOrganizerContactInfo(gig) {
@@ -122,6 +127,13 @@ export default {
                     endMinutes = `0${endMinutes}`
                 }
                 return `${startString} @ ${startHours}:${startMinutes} - ${endHours}:${endMinutes}`
+            }
+        },
+        employeesAvailable() {
+            return function(gigId) {
+                let value = this.availableEmployees.find(o => o.gigId === gigId)
+                let members = value.availableMembers
+                return members
             }
         }
     }
