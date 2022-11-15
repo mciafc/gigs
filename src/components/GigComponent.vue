@@ -187,7 +187,7 @@ export default {
         employeesAvailable() {
             return function (gigId) {
                 try {
-                    console.log(this.people)
+                    console.log(this.gigs)
                     let value = this.people.find(o => o.gigId === gigId)
                     if (value) {
                         let members = value.availableMembers
@@ -195,7 +195,7 @@ export default {
                     }
                     return "There was an issue finding the availabilities for this event."
                 } catch(e) {
-                    console.log(this.people)
+                    console.log(this.gigs)
                     return "There was an issue finding the availabilities for this event."
                 }
             }
