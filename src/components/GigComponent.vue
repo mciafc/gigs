@@ -132,8 +132,11 @@ export default {
         employeesAvailable() {
             return function(gigId) {
                 let value = this.availableEmployees.find(o => o.gigId === gigId)
-                let members = value.availableMembers
-                return members
+                if (value) {
+                    let members = value.availableMembers
+                    return members
+                }
+                return []
             }
         }
     }
