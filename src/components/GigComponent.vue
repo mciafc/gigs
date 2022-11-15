@@ -1,6 +1,6 @@
 <template>
   <div v-if="userAuthenticated">
-    <p class="bindToTop">Welcome back, <span style="color: rgb(229, 157, 22)" v-if="user.isExec"><b>[EXEC] </b></span> <span v-if="user.FirstName == `Ethan`">"Senior Executive Member" </span>{{ user.FirstName }}</p>
+    <p class="bindToTop">Welcome back, <span style="color: rgb(229, 157, 22)" v-if="user.isExec"><b>[EXEC] </b></span> <span v-if="user.FirstName == `Ethan` && user.LastName == `Ross`">"Senior Executive Member" (but not really) </span>{{ user.FirstName }}</p>
     <h1>Upcoming Events:</h1>
         <button v-if="user.isExec" @click="this.execToolsEnabled = !this.execToolsEnabled">TOGGLE EXEC TOOLS</button>
         <div v-if="this.gigs.length > 0" class="container">
@@ -130,14 +130,16 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;1,800&display=swap');
 .gig {
-    background-color: #313030;
+    background-color: #31303080;
+    box-shadow:.8rem .8rem 1.4rem #151515, 
+               -.2rem -.2rem 1.8rem #272727;
+    backdrop-filter: blur(8px);
     color: #fff;
     float: left;
     padding-top: 50px;
     border-radius: 10px;
-    box-shadow: #000 5px 5px;
     padding-bottom: 50px;
     padding-left: 20px;
     padding-right: 20px;
@@ -157,6 +159,8 @@ export default {
     display: flex;
     overflow-x: auto;
     flex-wrap: nowrap;
+    padding-top: 25px;
+    padding-bottom: 25px;
 }
 
 .bindToTop {
@@ -180,7 +184,7 @@ button {
     color: white;
     transition: all 200ms;
     font-weight: bold;
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 .deletebutton {

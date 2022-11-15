@@ -55,7 +55,8 @@ export default {
 }
 
 body {
-  background-color: #1a1a1a;
+  background-image: linear-gradient(-45deg, #1a1a1a, #292929);
+  height: 0;
 }
 
 .footer {
