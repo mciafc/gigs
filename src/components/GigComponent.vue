@@ -111,6 +111,7 @@ export default {
             this.organizerContactInfo.modalOpen = true
         },
         saveAvailabilities(data) {
+            console.log(data)
             this.availableMembers = data
         },
         closeOrganizerContactInfo() {
