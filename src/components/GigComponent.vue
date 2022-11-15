@@ -69,10 +69,9 @@ export default {
     },
     data() {
         return {
-            arrayOfCircles: Array(5),
             socket: {},
             gigs: {},
-            availableEmployees: "a",
+            availableEmployees: {"no one": "true"},
             pastgigs: {},
             markedForDeletion: "",
             execToolsEnabled: false,
