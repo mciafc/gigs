@@ -184,19 +184,21 @@ export default {
             }
         },
         employeesAvailable() {
-            return function (gigId) {
-                try {
-                    console.log(this.people)
-                    let value = this.people.find(o => o.gigId === gigId)
-                    if (value) {
-                        let members = value.availableMembers
-                        return members
-                    }
-                    return "There was an issue finding the availabilities for this event."
-                } catch(e) {
-                    console.log(this.people)
-                    return "There was an issue finding the availabilities for this event."
-                }
+            return function () {
+            // return function (gigId) {
+                // try {
+                //     console.log(this.people)
+                //     let value = this.people.find(o => o.gigId === gigId)
+                //     if (value) {
+                //         let members = value.availableMembers
+                //         return members
+                //     }
+                //     return "There was an issue finding the availabilities for this event."
+                // } catch(e) {
+                //     console.log(this.people)
+                //     return "There was an issue finding the availabilities for this event."
+                // }
+                return "There was an issue finding the availabilities for this event."
             }
         }
     }
