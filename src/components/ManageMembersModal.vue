@@ -23,9 +23,11 @@
             <p>{{ member.Email }}</p>
         </div>
         </div>
+        <button class="emailButton" @click="copyEmailList">COPY</button>
         <button @click="closeModalAnimation" class="closeButton">DONE</button>
     </div>
     <div class="darkenbackground" ref="darkenbackground" v-if="ModalOpenProp" @click="closeModalAnimation"></div>
+    <div class="copyBox" ref="copybox" v-if="copyBoxVisible && ModalOpenProp"><h3>Copied!</h3></div>
 </template>
 
 
@@ -44,7 +46,9 @@ export default {
         return {
             dropDownOpen: "",
             socket: {},
-            AvailableMembersData: "a"
+            AvailableMembersData: "a",
+            emailList: [],
+            copyBoxVisible: false
         }
     },
     created() {
@@ -68,6 +72,22 @@ export default {
         closeModalEvent() {
             this.$emit('closemodal')
         },
+        copyEmailList() {
+            this.copyBoxVisible = true;
+            this.emailList = []
+            this.AvailableMembersData.forEach((item) => {
+                this.emailList.push(item["Email"])
+            })
+            navigator.clipboard.writeText(this.emailList.toString())
+            setTimeout(this.closeCopyBox, 2000)
+        },
+        closeCopyBox() {
+            this.$refs.copybox.classList.add('fade-out')
+            setTimeout(this.copyBoxGone, 2000)
+        },
+        copyBoxGone() {
+            this.copyBoxVisible = false
+        },
         openDropDown(gigId) {
             return this.dropDownOpen = gigId
         },
@@ -82,7 +102,8 @@ export default {
             console.log(this.GigId)
             this.removing = true
             this.socket.emit("removeuser", user, this.GigId)
-        }
+        },
+
     },
     computed: {
         employeesAvailable() {
@@ -229,7 +250,7 @@ export default {
 }
 
 .darkenbackground {
-    z-index: 10000;
+    z-index: 10;
     width: 100%;
     height: 100%;
     background-color: #19191980;
@@ -242,7 +263,55 @@ export default {
 }
 
 .closeButton {
+    margin-top: 5px;
+}
+
+.emailButton {
     margin-top: 20px;
+    border-color: rgb(42, 181, 42);
+    background-color: rgb(42, 181, 42);
+    margin-right: 20px;
+}
+
+.copyText {
+    color: #ffffff;
+}
+.copyBox {
+    height: fit-content;
+    width: fit-content;
+    background-color: rgb(42, 181, 42);
+    box-shadow: .8rem .8rem 1.4rem #1a1a1a,
+            -.2rem -.2rem 1.8rem #272727;
+    position: absolute;
+    text-align: center;
+    border-radius: 10px;
+    width: 200px;
+    top: 20px;
+    left: 20px;
+    z-index: 11;
+    animation: scrollIn 600ms cubic-bezier(.34, .46, .35, 1.1) forwards;
+}
+
+@keyframes scrollIn {
+    0% {
+        transform: translateX(-130%)
+    };
+    100% {
+        transform: translateX(130%)
+    }
+}
+
+@keyframes scrollOut {
+    0% {
+        transform: translateX(0)
+    };
+    100% {
+        transform: translateX(130%)
+    }
+}
+
+.scrollout {
+    animation: scrollOut 600ms cubic-bezier(.34, .46, .35, 1.1) forwards;
 }
 
 .unscrollable {
