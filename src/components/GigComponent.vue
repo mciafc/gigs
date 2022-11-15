@@ -99,9 +99,7 @@ export default {
             this.markedForDeletion = ""
         })
         this.socket.on("availability", data => {   
-            console.log(data) 
-            this.availableMembers = data
-            console.log(this.availableMembers)
+            this.saveAvailabilities(data)
         })
     },
     methods: {
@@ -111,7 +109,10 @@ export default {
             this.organizerContactInfo.number = gig.organizerContactNumber
             this.organizerContactInfo.regByOrganizer = gig.registeredByOrganizer
             this.organizerContactInfo.modalOpen = true
-        },   
+        },
+        saveAvailabilities(data) {
+            this.availableMembers = data
+        },
         closeOrganizerContactInfo() {
             this.organizerContactInfo.name = undefined
             this.organizerContactInfo.email = undefined
