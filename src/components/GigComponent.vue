@@ -71,8 +71,7 @@ export default {
         return {
             socket: {},
             gigs: {},
-            availableEmployees: [],
-            availableMembers: {},
+            people: [],
             pastgigs: {},
             markedForDeletion: "",
             execToolsEnabled: false,
@@ -112,7 +111,7 @@ export default {
         },
         saveAvailabilities(data) {
             console.log(data)
-            this.availableMembers = data
+            this.people = data
         },
         closeOrganizerContactInfo() {
             this.organizerContactInfo.name = undefined
@@ -187,14 +186,14 @@ export default {
         employeesAvailable() {
             return function (gigId) {
                 try {
-                    let value = this.availableMembers["[[Target]]"].find(o => o.gigId === gigId)
+                    let value = this.people.find(o => o.gigId === gigId)
                     if (value) {
                         let members = value.availableMembers
                         return members
                     }
                     return "There was an issue finding the availabilities for this event."
                 } catch(e) {
-                    console.log(this.availableMembers)
+                    console.log(this.people)
                     return "There was an issue finding the availabilities for this event."
                 }
             }
