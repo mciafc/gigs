@@ -72,6 +72,7 @@ export default {
             socket: {},
             gigs: {},
             availableEmployees: [],
+            availableMembers: {},
             pastgigs: {},
             markedForDeletion: "",
             execToolsEnabled: false,
@@ -98,7 +99,7 @@ export default {
             this.markedForDeletion = ""
         })
         this.socket.on("availability", data => {    
-            this.availableEmployees = data
+            this.availableMembers = data
         })
     },
     methods: {
@@ -182,14 +183,14 @@ export default {
         employeesAvailable() {
             return function (gigId) {
                 try {
-                    let value = this.availableEmployees.find(o => o.gigId === gigId)
+                    let value = this.availableMembers.find(o => o.gigId === gigId)
                     if (value) {
                         let members = value.availableMembers
                         return members
                     }
                     return "There was an issue finding the availabilities for this event."
                 } catch(e) {
-                    console.log(this.availableEmployees)
+                    console.log(this.availableMembers)
                     return "There was an issue finding the availabilities for this event."
                 }
             }
