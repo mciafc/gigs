@@ -101,6 +101,7 @@ export default {
         this.socket.on("availability", data => {   
             console.log(data) 
             this.availableMembers = data
+            console.log(this.availableMembers)
         })
     },
     methods: {
