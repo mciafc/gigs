@@ -71,7 +71,7 @@ export default {
         return {
             socket: {},
             gigs: {},
-            availableEmployees: {"no one": "true"},
+            availableEmployees: {},
             pastgigs: {},
             markedForDeletion: "",
             execToolsEnabled: false,
@@ -97,8 +97,7 @@ export default {
             this.execToolsEnabled = false
             this.markedForDeletion = ""
         })
-        this.socket.on("availability", data => {
-            console.log(this.availableEmployees)
+        this.socket.on("availability", data => {    
             this.availableEmployees = data
         })
     },
@@ -190,6 +189,7 @@ export default {
                     }
                     return "There was an issue finding the availabilities for this event."
                 } catch(e) {
+                    console.log(e)
                     return "There was an issue finding the availabilities for this event."
                 }
             }
