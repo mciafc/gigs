@@ -71,7 +71,7 @@ export default {
         return {
             socket: {},
             gigs: {},
-            people: [],
+            people: undefined,
             pastgigs: {},
             markedForDeletion: "",
             execToolsEnabled: false,
