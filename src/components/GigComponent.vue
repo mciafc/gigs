@@ -198,6 +198,7 @@ export default {
                 //     console.log(this.people)
                 //     return "There was an issue finding the availabilities for this event."
                 // }
+                console.log(this.people)
                 return "There was an issue finding the availabilities for this event."
             }
         }
