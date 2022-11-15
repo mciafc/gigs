@@ -189,7 +189,7 @@ export default {
                     }
                     return "There was an issue finding the availabilities for this event."
                 } catch(e) {
-                    console.log(e)
+                    console.log(this.availableEmployees)
                     return "There was an issue finding the availabilities for this event."
                 }
             }
