@@ -186,6 +186,7 @@ export default {
         employeesAvailable() {
             return function (gigId) {
                 try {
+                    console.log(this.people)
                     let value = this.people.find(o => o.gigId === gigId)
                     if (value) {
                         let members = value.availableMembers
