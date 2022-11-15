@@ -237,7 +237,7 @@ export default {
     bottom: 0;
     text-align: center;
     height: fit-content;
-    width: 1200px;
+    width: 600px;
     background-color: #191919;
     font-size: 16px;
     z-index: 20000000;
