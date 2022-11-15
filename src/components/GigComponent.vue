@@ -72,7 +72,7 @@ export default {
             arrayOfCircles: Array(5),
             socket: {},
             gigs: {},
-            availableEmployees: {},
+            availableEmployees: "a",
             pastgigs: {},
             markedForDeletion: "",
             execToolsEnabled: false,
