@@ -2,8 +2,8 @@
     <div class="modal" ref="modal" v-if="ModalOpenProp">
         <h1 class="header">MANAGE AVAILABLE MEMBERS</h1>
         <div class="container">
-        <div v-if="AvailableMembersData == 'a'">
-            <h1>Nobody is currently available.</h1>
+        <div v-if="AvailableMembersData.length == 0">
+            <h1 class="header">Nobody is currently available.</h1>
         </div>
         <div class="gig" v-else v-for="member in AvailableMembersData" :key="member._id">
             <div class="dropdownOuterBox" @click="openDropDown(member._id)" @mouseleave="closeDropDown">
@@ -53,6 +53,7 @@ export default {
     mounted() {
         this.socket.on("removeduser", data => {
             this.AvailableMembersData = data.availability
+            this.closeDropDown()
         })
         this.socket.on("availabilityData", data => {
             this.AvailableMembersData = data.availability
