@@ -111,7 +111,7 @@ export default {
             console.log(this.people)
         },
         saveAvailabilities(avdata) {
-            this.people.available = avdata
+            this.people = avdata
             console.log(this.people)
         },
         closeOrganizerContactInfo() {
@@ -187,15 +187,15 @@ export default {
         employeesAvailable() {
             return function (gigId) {
                 try {
-                    console.log(this.people.available)
-                    let value = this.people.available.find(o => o.gigId === gigId)
+                    console.log(this.people)
+                    let value = this.people.find(o => o.gigId === gigId)
                     if (value) {
                         let members = value.availableMembers
                         return members
                     }
                     return "There was an issue finding the availabilities for this event."
                 } catch(e) {
-                    console.log(this.people.available)
+                    console.log(this.people)
                     return "There was an issue finding the availabilities for this event."
                 }
             }
