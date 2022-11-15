@@ -98,7 +98,8 @@ export default {
             this.execToolsEnabled = false
             this.markedForDeletion = ""
         })
-        this.socket.on("availability", data => {    
+        this.socket.on("availability", data => {   
+            console.log(data) 
             this.availableMembers = data
         })
     },
