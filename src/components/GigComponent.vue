@@ -108,10 +108,11 @@ export default {
             this.organizerContactInfo.number = gig.organizerContactNumber
             this.organizerContactInfo.regByOrganizer = gig.registeredByOrganizer
             this.organizerContactInfo.modalOpen = true
+            console.log(this.people)
         },
         saveAvailabilities(avdata) {
             this.people.available = avdata
-            console.log(this.people.available)
+            console.log(this.people)
         },
         closeOrganizerContactInfo() {
             this.organizerContactInfo.name = undefined
