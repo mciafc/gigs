@@ -110,7 +110,6 @@ export default {
             this.organizerContactInfo.modalOpen = true
         },
         saveAvailabilities(avdata) {
-            console.log(data)
             this.people = avdata
             console.log(this.people)
         },
