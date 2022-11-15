@@ -1,20 +1,20 @@
 <template>
   <div v-if="userAuthenticated">
     <p class="bindToTop">Welcome back, <span style="color: rgb(229, 157, 22)" v-if="user.isExec"><b>[EXEC] </b></span> <span v-if="user.FirstName == `Ethan` && user.LastName == `Ross`">"Senior Executive Member" (but not really) </span>{{ user.FirstName }}</p>
-    <h1>Upcoming Events:</h1>
+    <h1 class="upcomingEvents">Upcoming Events:</h1>
         <button v-if="user.isExec" @click="this.execToolsEnabled = !this.execToolsEnabled">TOGGLE EXEC TOOLS</button>
         <div v-if="this.gigs.length > 0" class="container">
             <div class="gig" v-for="gig in this.gigs" :key="gig._id">
-                <h1>{{ gig.gigName }}</h1>
-                <h3>By: {{ gig.organizationName }}</h3>
-                <h4>📅{{ dateRange(gig.gigStartDate, gig.gigEndDate) }}</h4>
-                <p>📍<b>Location:</b> {{ gig.gigLocation }}</p>
-                <p v-html="trueOrFalse(gig.paidJob)" v-if="user.isExec && gig.paidJob"></p>
-                <p>👥<b>Members Needed:</b> {{ employeesNeeded(gig.employeesNeeded) }}</p>
-                <h3 v-if="gig.additionalInformation != 'No additional details specified.'">Additional Info:</h3>
-                <p v-if="gig.additionalInformation != 'No additional details specified.'">{{ gig.additionalInformation }}</p>
-                <p v-if="gig.registeredByOrganizer == false">Registered by AFC Exec. (Information may be inaccurate)</p>
-                <div v-if="employeesAvailable(gig._id)">
+                <h1 class="gigName">{{ gig.gigName }}</h1>
+                <h3 class="organizationName">By: {{ gig.organizationName }}</h3>
+                <h4 class="dateRange">📅{{ dateRange(gig.gigStartDate, gig.gigEndDate) }}</h4>
+                <p class="gigLocation">📍<b>Location:</b> {{ gig.gigLocation }}</p>
+                <p v-if="user.isExec" class="paidJob">Paid Job: <span v-if="gig.paidJob">Yes</span><span v-else>No</span></p>
+                <p class="employeesNeeded">👥<b>Members Needed:</b> {{ employeesNeeded(gig.employeesNeeded) }}</p>
+                <h3 v-if="gig.additionalInformation != 'No additional details specified.'" class="additionalInformation">Additional Info:</h3>
+                <p v-if="gig.additionalInformation != 'No additional details specified.'" class="additionalInformation">{{ gig.additionalInformation }}</p>
+                <p v-if="gig.registeredByOrganizer == false" class="registeredByOrganizer">Registered by AFC Exec. (Information may be inaccurate)</p>
+                <div v-if="employeesAvailable(gig._id) != `There was an issue finding the availabilities for this event.`">
                     <button @click="this.socket.emit('available', user, gig._id)">AVAILABLE? CLICK HERE</button>
                     <p>{{ employeesAvailable(gig._id).length }} member<span v-if="employeesAvailable(gig._id).length > 1 || employeesAvailable(gig._id).length == 0">s are</span><span v-else> is</span> marked as available.</p>
                 </div>
@@ -22,7 +22,7 @@
                     <h3>Exec Tools</h3>
                     <p><button @click="getOrganizerContactInfo(gig)">VIEW ORGANIZER CONTACT INFO</button></p>
                     <p><button>MANAGE AVAILABLE MEMBERS</button></p>
-                    <p><button class="deletebutton" @click="areYouSureYouWantToDelete()" v-if="!deleteConfirmation">DELETE EVENT</button></p>
+                    <p><button class="deletebutton" @click="confirmDelete()" v-if="!deleteConfirmation">DELETE EVENT</button></p>
                     <p><button v-if="deleteConfirmation" class="deletebutton" @click="requestEventDeletion(gig._id)">ARE YOU REALLY SURE YOU WANT TO DO THIS? YOU CANT GO BACK!!!!</button></p>
                     <p><button v-if="deleteConfirmation" class="canceldeletebutton" @click="deleteConfirmation = false">CANCEL DELETION</button></p>
                 </div>
@@ -86,7 +86,7 @@ export default {
             }
             alert(`WARNING: THIS INFORMATION MAY NOT BE ACCURATE AS THIS EVENT WAS REGISTERED BY AN AFC EXEC AND NOT THE ORGANIZER\nOrganizer Name: ${gig.organizerName}\nOrganizer Email: ${gig.organizerContactEmail}\nOrganizer Phone Number: ${gig.organizerContactNumber}`)
         },
-        areYouSureYouWantToDelete() {
+        confirmDelete() {
             this.deleteConfirmation = true
             alert("PLEASE MAKE SURE THIS IS ACTUALLY WHAT YOU ARE MEANING TO DO, IF YOU DELETE THE EVENT IT IS PERMANENTLY DELETED AND NOT RECOVERABLE. BE CAREFUL PLEASE")
         },
@@ -136,7 +136,7 @@ export default {
                     let members = value.availableMembers
                     return members
                 }
-                return []
+                return "There was an issue finding the availabilities for this event."
             }
         }
     }
@@ -148,7 +148,7 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;1,800&display=swap');
 .gig {
     background-color: #31303080;
-    box-shadow:.8rem .8rem 1.4rem #151515, 
+    box-shadow:.8rem .8rem 1.4rem #1a1a1a, 
                -.2rem -.2rem 1.8rem #272727;
     backdrop-filter: blur(8px);
     color: #fff;
@@ -170,7 +170,12 @@ export default {
     color: red;
 }
 
+.upcomingEvents {
+    font-family: 'Poppins', sans-serif;
+}
+
 .container {
+    font-family: 'Poppins', sans-serif;
     display: flex;
     overflow-x: auto;
     flex-wrap: nowrap;
@@ -179,6 +184,7 @@ export default {
 }
 
 .bindToTop {
+    font-family: 'Poppins', sans-serif;
     position: absolute;
     top: 0;
     margin-left: auto;
@@ -215,5 +221,37 @@ button {
 button:hover {
     background-color: rgb(229, 157, 22, 0.9);
     transition: all 200ms;
+}
+
+.gigName {
+    position: relative;
+}
+
+.organizationName {
+    position: relative;
+}
+
+.dateRange {
+    position: relative;
+}
+
+.gigLocation {
+    position: relative;
+}
+
+.paidJob {
+    position: relative;
+}
+
+.employeesNeeded {
+    position: relative;
+}
+
+.additionalInformation {
+    position: relative;
+}
+
+.registeredByOrganizer {
+    position: relative;
 }
 </style>
