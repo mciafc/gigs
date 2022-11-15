@@ -33,10 +33,10 @@
                 <p v-if="gig.registeredByOrganizer == false" class="registeredByOrganizer">Registered by AFC Exec.
                     (Information may be inaccurate)</p>
                 <div
-                    v-if="employeesAvailable(gig._id) != `There was an issue finding the availabilities for this event.`">
+                    v-if="employeesAvailable(people, gig._id) != `There was an issue finding the availabilities for this event.`">
                     <button @click="this.socket.emit('available', user, gig._id)" class="availableButton">AVAILABLE? CLICK HERE</button>
-                    <p class="employeesAvailable"><span v-if="employeesAvailable(gig._id).length > 0">{{ employeesAvailable(gig._id).length }}</span><span v-else>No</span> member<span
-                            v-if="employeesAvailable(gig._id).length > 1 || employeesAvailable(gig._id).length == 0">s
+                    <p class="employeesAvailable"><span v-if="employeesAvailable(people, gig._id).length > 0">{{ employeesAvailable(people, gig._id).length }}</span><span v-else>No</span> member<span
+                            v-if="employeesAvailable(people, gig._id).length > 1 || employeesAvailable(people, gig._id).length == 0">s
                             are</span><span v-else> is</span> marked as available.</p>
                 </div>
             </div>
@@ -185,17 +185,15 @@ export default {
             }
         },
         employeesAvailable() {
-            return function (gigId) {
+            return function (people, gigId) {
                 try {
-                    console.log(this.gigs)
-                    let value = this.people.find(o => o.gigId === gigId)
+                    let value = people.find(o => o.gigId === gigId)
                     if (value) {
                         let members = value.availableMembers
                         return members
                     }
                     return "There was an issue finding the availabilities for this event."
                 } catch(e) {
-                    console.log(this.gigs)
                     return "There was an issue finding the availabilities for this event."
                 }
             }
