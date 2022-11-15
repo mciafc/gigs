@@ -98,6 +98,7 @@ export default {
             this.markedForDeletion = ""
         })
         this.socket.on("availability", data => {
+            console.log(this.availableEmployees)
             this.availableEmployees = data
         })
     },
