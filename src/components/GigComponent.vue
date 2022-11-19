@@ -33,10 +33,10 @@
                 <p v-if="gig.registeredByOrganizer == false" class="registeredByOrganizer">Registered by AFC Exec.
                     (Information may be inaccurate)</p>
                 <div
-                    v-if="employeesAvailable(gig._id) != `There was an issue finding the availabilities for this event.`">
+                    v-if="employeesAvailable(people, gig._id) != `There was an issue finding the availabilities for this event.`">
                     <button @click="this.socket.emit('available', user, gig._id)" class="availableButton">AVAILABLE? CLICK HERE</button>
-                    <p class="employeesAvailable"><span v-if="employeesAvailable(gig._id).length > 0">{{ employeesAvailable(gig._id).length }}</span><span v-else>No</span> member<span
-                            v-if="employeesAvailable(gig._id).length > 1 || employeesAvailable(gig._id).length == 0">s
+                    <p class="employeesAvailable"><span v-if="employeesAvailable(people, gig._id).length > 0">{{ employeesAvailable(people, gig._id).length }}</span><span v-else>No</span> member<span
+                            v-if="employeesAvailable(people, gig._id).length > 1 || employeesAvailable(people, gig._id).length == 0">s
                             are</span><span v-else> is</span> marked as available.</p>
                 </div>
             </div>
@@ -71,7 +71,7 @@ export default {
         return {
             socket: {},
             gigs: {},
-            availableEmployees: {"no one": "true"},
+            people: {},
             pastgigs: {},
             markedForDeletion: "",
             execToolsEnabled: false,
@@ -97,8 +97,8 @@ export default {
             this.execToolsEnabled = false
             this.markedForDeletion = ""
         })
-        this.socket.on("availability", data => {
-            this.availableEmployees = data
+        this.socket.on("availability", data => {   
+            this.saveAvailabilities(data)
         })
     },
     methods: {
@@ -108,7 +108,12 @@ export default {
             this.organizerContactInfo.number = gig.organizerContactNumber
             this.organizerContactInfo.regByOrganizer = gig.registeredByOrganizer
             this.organizerContactInfo.modalOpen = true
-        },   
+            console.log(this.people)
+        },
+        saveAvailabilities(avdata) {
+            this.people = avdata
+            console.log(this.people)
+        },
         closeOrganizerContactInfo() {
             this.organizerContactInfo.name = undefined
             this.organizerContactInfo.email = undefined
@@ -180,13 +185,17 @@ export default {
             }
         },
         employeesAvailable() {
-            return function (gigId) {
-                let value = this.availableEmployees.find(o => o.gigId === gigId)
-                if (value) {
-                    let members = value.availableMembers
-                    return members
+            return function (people, gigId) {
+                try {
+                    let value = people.find(o => o.gigId === gigId)
+                    if (value) {
+                        let members = value.availableMembers
+                        return members
+                    }
+                    return "There was an issue finding the availabilities for this event."
+                } catch(e) {
+                    return "There was an issue finding the availabilities for this event."
                 }
-                return "There was an issue finding the availabilities for this event."
             }
         }
     }
