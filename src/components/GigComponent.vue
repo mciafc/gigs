@@ -6,7 +6,7 @@
         <!-- <button v-if="user.isExec" @click="this.execToolsEnabled = !this.execToolsEnabled">TOGGLE EXEC TOOLS</button> -->
         <div v-if="this.gigs.length > 0" class="container">
             <div class="gig" v-for="gig in this.gigs" :key="gig._id">
-                <div class="dropdownOuterBox" v-if="user.isExec" @click="openDropDown(gig._id)" @mouseleave="closeDropDown">
+                <div class="dropdownOuterBox" v-if="user.isExec" @click="openDropDown" @mouseleave="closeDropDown">
                     <svg class="dropdownMenu" viewBox="-95 -95 700 700">
                         <circle cx="256" cy="256" r="48"></circle>
                         <path
