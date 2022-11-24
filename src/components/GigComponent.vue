@@ -16,6 +16,7 @@
                     <div class="dropdown" v-if="dropDownOpen == gig._id">
                         <p @click="getOrganizerContactInfo(gig)" class="dropdownItem">View Contact Info</p>
                         <p class="dropdownItem" @click="manageMembers(gig._id)">Manage Available Members</p>
+                        <p class="dropdownItem" @click="toggleHomepageVisibility(gig._id)"><span v-if="!gig.showOnHomepage">Show</span><span v-else>Hide</span> on homepage</p>
                         <p class="dropdownItem" style="color: rgb(255, 91, 91);" @click="confirmDelete(gig._id)">Delete</p>
                     </div>
                 </div>
@@ -113,6 +114,9 @@ export default {
         saveAvailabilities(avdata) {
             this.people = avdata
             console.log(this.people)
+        },
+        toggleHomepageVisibility(gigId) {
+            socket.emit("toggleHomepageVisibility", gigId)
         },
         closeOrganizerContactInfo() {
             this.organizerContactInfo.name = undefined
