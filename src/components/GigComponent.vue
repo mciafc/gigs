@@ -116,7 +116,7 @@ export default {
             console.log(this.people)
         },
         toggleHomepageVisibility(gigId) {
-            socket.emit("toggleHomepageVisibility", gigId)
+            this.socket.emit("toggleHomepageVisibility", gigId)
         },
         closeOrganizerContactInfo() {
             this.organizerContactInfo.name = undefined
