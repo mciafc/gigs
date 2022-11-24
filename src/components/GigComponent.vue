@@ -117,6 +117,7 @@ export default {
         },
         toggleHomepageVisibility(gigId) {
             this.socket.emit("toggleHomepageVisibility", gigId)
+            this.dropDownOpen == ""
         },
         closeOrganizerContactInfo() {
             this.organizerContactInfo.name = undefined
