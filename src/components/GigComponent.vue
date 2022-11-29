@@ -35,7 +35,8 @@
                     (Information may be inaccurate)</p>
                 <div
                     v-if="employeesAvailable(people, gig._id) != `There was an issue finding the availabilities for this event.`">
-                    <button @click="this.socket.emit('available', user, gig._id)" class="availableButton">AVAILABLE? CLICK HERE</button>
+                    <button @click="this.socket.emit('available', user, gig._id)" class="availableButton" v-if="!userIsAvailable(people, gig._id, user)">AVAILABLE? CLICK HERE</button>
+                    <button @click="this.socket.emit('available', user, gig._id)" class="availableButton" style="background-color: red !important; border-color: red !important;" v-else>NO LONGER AVAILABLE?</button>
                     <p class="employeesAvailable"><span v-if="employeesAvailable(people, gig._id).length > 0">{{ employeesAvailable(people, gig._id).length }}</span><span v-else>No</span> member<span
                             v-if="employeesAvailable(people, gig._id).length > 1 || employeesAvailable(people, gig._id).length == 0">s
                             are</span><span v-else> is</span> marked as available.</p>
@@ -113,7 +114,6 @@ export default {
         },
         saveAvailabilities(avdata) {
             this.people = avdata
-            console.log(this.people)
         },
         toggleHomepageVisibility(gigId) {
             this.socket.emit("toggleHomepageVisibility", gigId)
@@ -200,6 +200,20 @@ export default {
                     return "There was an issue finding the availabilities for this event."
                 } catch(e) {
                     return "There was an issue finding the availabilities for this event."
+                }
+            }
+        },
+        userIsAvailable() {
+            return function (people, gigId, user) {
+                try {
+                    let value = people.find(o => o.gigId === gigId)
+                    if (value) {
+                        let userFound = value.availableMembers.some(o => o.PIN === user.PIN)
+                        return userFound
+                    }
+                    return false
+                } catch (e) {
+                    return false
                 }
             }
         }
