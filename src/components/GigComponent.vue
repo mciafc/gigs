@@ -50,7 +50,7 @@
         <ManageMembersModal :ModalOpenProp="managingMembersModalOpen" :AvailableMembers="managingMembers" :GigId="managingMembersGigId" @closemodal="closeManagingMembers" />
         <InfoModal :infoModalOpenProp="organizerContactInfo.modalOpen" :ContactEmail="organizerContactInfo.email" :RegisteredByOrganizer="organizerContactInfo.regByOrganizer" :ContactNumber="organizerContactInfo.number" :ContactName="organizerContactInfo.name" @closeinfomodal="closeOrganizerContactInfo" />
         <DeletionModal :deletionModalOpenProp="deleteConfirmation" :gigToDelete="markedForDeletion" @closedeletemodal="deleteConfirmation = false" @eliminateEvent="requestEventDeletion(markedForDeletion)" />
-        <AnnounceModal :announceModalOpenProp="announcementModal.isOpen" :gig="announcementModal.gig" />
+        <AnnounceModal :announceModalOpenProp="announcementModal.isOpen" :gig="announcementModal.gig" @closeannouncemodal="closeAnnounceModal" />
     </div>
 </template>
 
@@ -133,7 +133,10 @@ export default {
             this.organizerContactInfo.email = undefined
             this.organizerContactInfo.number = undefined
             this.organizerContactInfo.modalOpen = false
-        },   
+        }, 
+        closeAnnounceModal() {
+            this.announcementModal = {}
+        },  
         manageMembers(gigId) {
             this.socket.emit('getavailability', gigId)
             this.managingMembersModalOpen = true
