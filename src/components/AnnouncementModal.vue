@@ -30,7 +30,7 @@ export default {
         }
     },
     created() {
-        this.socket = io("https://io.mciafc.com/gigs") 
+        this.socket = io("http://localhost:7694/gigs") 
     },
     mounted() {
         this.socket.on("emailSent", () => {
@@ -48,6 +48,9 @@ export default {
             setTimeout(this.closeModalEvent, 100)
         },
         closeModalEvent() {
+            this.emailSubject = ""
+            this.emailBody = ""
+            this.emailStatus = ""
             this.$emit('closeannouncemodal')
         },
         sendEmail() {
@@ -59,7 +62,7 @@ export default {
             if (this.emailBody.length == 0) {
                 return this.emailStatus = "Failed to send: Body cannot be empty."
             }
-            this.socket.emit("sendEmail", this.emailSubject, this.emailBody)
+            this.socket.emit("sendEmail", this.emailSubject, this.emailBody, this.gig)
         }
     },
 }
