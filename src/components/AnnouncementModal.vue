@@ -4,7 +4,7 @@
         <p><input type="text" class="subjectLine" ref="emailSubject" v-model="emailSubject" :placeholder="`UPDATE: ${gig.gigName}`"></p>
         <textarea class="emailBody" ref="emailBody" v-model="emailBody" placeholder="Email body goes here..."></textarea>
         <p>{{emailStatus}}</p>
-        <p><button @click="sendEmail" class="closeButton">DONE</button></p>
+        <p><button @click="sendEmail" class="closeButton" ref="sendButton" :disabled="isDisabled(emailStatus)">SEND</button></p>
     </div>
     <div class="darkenbackground" ref="darkenbackground" v-if="announceModalOpenProp" @click="closeModalAnimation"
         :class="{ noscroll: announceModalOpenProp }"></div>
@@ -54,17 +54,29 @@ export default {
             this.$emit('closeannouncemodal')
         },
         sendEmail() {
-            console.log(this.emailSubject)
-            console.log(this.emailBody)
-            if (this.emailSubject.length == 0) {
-                this.emailSubject = `UPDATE: ${this.gig.gigName}`
+            if (!this.isDisabled(this.emailStatus)) {
+                console.log(this.emailSubject)
+                console.log(this.emailBody)
+                if (this.emailSubject.length == 0) {
+                    this.emailSubject = `UPDATE: ${this.gig.gigName}`
+                }
+                if (this.emailBody.length == 0) {
+                    return this.emailStatus = "Failed to send: Body cannot be empty."
+                }
+                this.socket.emit("sendEmail", this.emailSubject, this.emailBody, this.gig)
             }
-            if (this.emailBody.length == 0) {
-                return this.emailStatus = "Failed to send: Body cannot be empty."
-            }
-            this.socket.emit("sendEmail", this.emailSubject, this.emailBody, this.gig)
         }
     },
+    computed: {
+        isDisabled() {
+            return function(status) {
+                if (status == "Sending..." || status == "Sent!") {
+                    return true
+                }
+                return false
+            }
+        }
+    }
 }
 
 </script>
@@ -216,5 +228,10 @@ export default {
     left: 0;
     right: 0;
     bottom: 120px;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 </style>
