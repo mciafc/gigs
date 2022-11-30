@@ -17,6 +17,7 @@
                         <p @click="getOrganizerContactInfo(gig)" class="dropdownItem">View Contact Info</p>
                         <p class="dropdownItem" @click="manageMembers(gig._id)">Manage Available Members</p>
                         <p class="dropdownItem" @click="toggleHomepageVisibility(gig._id)"><span v-if="!gig.showOnHomepage">Show</span><span v-else>Hide</span> on homepage</p>
+                        <p class="dropdownItem" @click="openAnnouncementModal(gig)">Make an announcement</p>
                         <p class="dropdownItem" style="color: rgb(255, 91, 91);" @click="confirmDelete(gig._id)">Delete</p>
                     </div>
                 </div>
@@ -35,7 +36,8 @@
                     (Information may be inaccurate)</p>
                 <div
                     v-if="employeesAvailable(people, gig._id) != `There was an issue finding the availabilities for this event.`">
-                    <button @click="this.socket.emit('available', user, gig._id)" class="availableButton">AVAILABLE? CLICK HERE</button>
+                    <button @click="this.socket.emit('available', user, gig._id)" class="availableButton" v-if="!userIsAvailable(people, gig._id, user)">AVAILABLE? CLICK HERE</button>
+                    <button @click="this.socket.emit('available', user, gig._id)" class="availableButton" style="background-color: red !important; border-color: red !important;" v-else>NO LONGER AVAILABLE?</button>
                     <p class="employeesAvailable"><span v-if="employeesAvailable(people, gig._id).length > 0">{{ employeesAvailable(people, gig._id).length }}</span><span v-else>No</span> member<span
                             v-if="employeesAvailable(people, gig._id).length > 1 || employeesAvailable(people, gig._id).length == 0">s
                             are</span><span v-else> is</span> marked as available.</p>
@@ -48,6 +50,7 @@
         <ManageMembersModal :ModalOpenProp="managingMembersModalOpen" :AvailableMembers="managingMembers" :GigId="managingMembersGigId" @closemodal="closeManagingMembers" />
         <InfoModal :infoModalOpenProp="organizerContactInfo.modalOpen" :ContactEmail="organizerContactInfo.email" :RegisteredByOrganizer="organizerContactInfo.regByOrganizer" :ContactNumber="organizerContactInfo.number" :ContactName="organizerContactInfo.name" @closeinfomodal="closeOrganizerContactInfo" />
         <DeletionModal :deletionModalOpenProp="deleteConfirmation" :gigToDelete="markedForDeletion" @closedeletemodal="deleteConfirmation = false" @eliminateEvent="requestEventDeletion(markedForDeletion)" />
+        <AnnounceModal :announceModalOpenProp="announcementModal.isOpen" :gig="announcementModal.gig" @closeannouncemodal="closeAnnounceModal" />
     </div>
 </template>
 
@@ -56,13 +59,15 @@ import io from "socket.io-client";
 import DeletionModal from "./DeletionModal.vue"
 import InfoModal from "./InfoModal.vue"
 import ManageMembersModal from "./ManageMembersModal.vue"
+import AnnounceModal from "./AnnouncementModal.vue"
 
 export default {
     name: 'GigComponent',
     components: {
         DeletionModal,
         InfoModal,
-        ManageMembersModal
+        ManageMembersModal,
+        AnnounceModal
     },
     props: {
         userAuthenticated: Boolean,
@@ -81,7 +86,8 @@ export default {
             organizerContactInfo: {},
             managingMembersModalOpen: false,
             managingMembers: {},
-            managingMembersGigId: ""
+            managingMembersGigId: "",
+            announcementModal: {},
         }
     },
     created() {
@@ -113,7 +119,10 @@ export default {
         },
         saveAvailabilities(avdata) {
             this.people = avdata
-            console.log(this.people)
+        },
+        openAnnouncementModal(gig) {
+            this.announcementModal.isOpen = true
+            this.announcementModal.gig = gig
         },
         toggleHomepageVisibility(gigId) {
             this.socket.emit("toggleHomepageVisibility", gigId)
@@ -124,7 +133,10 @@ export default {
             this.organizerContactInfo.email = undefined
             this.organizerContactInfo.number = undefined
             this.organizerContactInfo.modalOpen = false
-        },   
+        }, 
+        closeAnnounceModal() {
+            this.announcementModal = {}
+        },  
         manageMembers(gigId) {
             this.socket.emit('getavailability', gigId)
             this.managingMembersModalOpen = true
@@ -200,6 +212,20 @@ export default {
                     return "There was an issue finding the availabilities for this event."
                 } catch(e) {
                     return "There was an issue finding the availabilities for this event."
+                }
+            }
+        },
+        userIsAvailable() {
+            return function (people, gigId, user) {
+                try {
+                    let value = people.find(o => o.gigId === gigId)
+                    if (value) {
+                        let userFound = value.availableMembers.some(o => o.PIN === user.PIN)
+                        return userFound
+                    }
+                    return false
+                } catch (e) {
+                    return false
                 }
             }
         }
